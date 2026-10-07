@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Módulo Policial San José - EPI N°3</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.titulo {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="titulo">
+    MÓDULO POLICIAL SAN JOSÉ<br>
+    E.P.I. N°3
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+const coordenadas = [
+    [-17.95510664146208, -67.12486078119986],
+    [-17.9554850994454, -67.12617706671914],
+    [-17.95554735535763, -67.12760768328363],
+    [-17.95525571612687, -67.12913679691165],
+    [-17.95432903771447, -67.13031416868792],
+    [-17.95266554098477, -67.13076708968114],
+    [-17.95118724940414, -67.13072450541523],
+    [-17.95116361056104, -67.13153972799068],
+    [-17.95322943624028, -67.1321770280839],
+    [-17.95603750813703, -67.13215802403202],
+    [-17.95657718398103, -67.13083278045387],
+    [-17.95661755643039, -67.13083077889416],
+    [-17.9583433650004, -67.12783620428611],
+    [-17.96174082222312, -67.12646803419204],
+    [-17.96218619855305, -67.124237454195],
+    [-17.96153046935122, -67.12331413055496],
+    [-17.95945230753358, -67.12200963138389],
+    [-17.95781309948574, -67.12241703363023],
+    [-17.95749326981644, -67.12161875318422],
+    [-17.95592158282195, -67.12188922140454],
+    [-17.95527535115634, -67.1238171322991],
+    [-17.95510664146208, -67.12486078119986]
+];
+
+const mapa = L.map('map');
+
+L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution: '&copy; OpenStreetMap contributors'
+    }
+).addTo(mapa);
+
+const delimitacion = L.polygon(coordenadas, {
+    color: '#0057b8',
+    weight: 4,
+    fillColor: '#3388ff',
+    fillOpacity: 0.25
+}).addTo(mapa);
+
+delimitacion.bindPopup(
+    '<b>MÓDULO POLICIAL SAN JOSÉ</b><br>E.P.I. N°3'
+);
+
+mapa.fitBounds(delimitacion.getBounds());
+
+</script>
+
+</body>
+</html>
