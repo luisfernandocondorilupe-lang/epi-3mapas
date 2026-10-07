@@ -1,107 +1,91 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Módulo Policial San José - EPI N°3</title>
-
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-
-<style>
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-}
-
-#map {
-    width: 100%;
-    height: 100%;
-}
-
-.titulo {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    background: white;
-    padding: 10px 16px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.3);
-    font-weight: bold;
-    text-align: center;
-    font-size: 16px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Módulo Policial San José - E.P.I. N°3</title>
+    
+    <!-- CSS de Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            background-color: #f8f9fa;
+        }
+        .popup-header {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            text-align: center;
+            font-size: 14px;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="titulo">
-    MÓDULO POLICIAL SAN JOSÉ<br>
-    E.P.I. N°3
-</div>
+    <div id="map"></div>
 
-<div id="map"></div>
+    <!-- JS de Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Coordenadas centradas en el área del Módulo Policial San José
+        var lat = -17.962;
+        var lng = -67.125;
 
-<script>
+        // Inicializar mapa optimizado para pantallas de alta densidad
+        var map = L.map('map', {
+            center: [lat, lng],
+            zoom: 15,
+            zoomControl: true,
+            tap: false
+        });
 
-const coordenadas = [
-    [-17.95510664146208, -67.12486078119986],
-    [-17.9554850994454, -67.12617706671914],
-    [-17.95554735535763, -67.12760768328363],
-    [-17.95525571612687, -67.12913679691165],
-    [-17.95432903771447, -67.13031416868792],
-    [-17.95266554098477, -67.13076708968114],
-    [-17.95118724940414, -67.13072450541523],
-    [-17.95116361056104, -67.13153972799068],
-    [-17.95322943624028, -67.1321770280839],
-    [-17.95603750813703, -67.13215802403202],
-    [-17.95657718398103, -67.13083278045387],
-    [-17.95661755643039, -67.13083077889416],
-    [-17.9583433650004, -67.12783620428611],
-    [-17.96174082222312, -67.12646803419204],
-    [-17.96218619855305, -67.124237454195],
-    [-17.96153046935122, -67.12331413055496],
-    [-17.95945230753358, -67.12200963138389],
-    [-17.95781309948574, -67.12241703363023],
-    [-17.95749326981644, -67.12161875318422],
-    [-17.95592158282195, -67.12188922140454],
-    [-17.95527535115634, -67.1238171322991],
-    [-17.95510664146208, -67.12486078119986]
-];
+        // Capa de mapa base en HD (CartoDB Voyager)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            maxNativeZoom: 18,
+            detectRetina: true, // Maximiza la nitidez en pantallas de celulares HD
+            subdomains: 'abcd',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }).addTo(map);
 
-const mapa = L.map('map');
+        // Delimitación geográfica (Polígono estilizado con bordes finos)
+        var polygonCoords = [
+            [-17.9542, -67.1278],
+            [-17.9565, -67.1270],
+            [-17.9592, -67.1245],
+            [-17.9615, -67.1170],
+            [-17.9625, -67.1165],
+            [-17.9658, -67.1188],
+            [-17.9678, -67.1205],
+            [-17.9642, -67.1238],
+            [-17.9610, -67.1285],
+            [-17.9580, -67.1292]
+        ];
 
-L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-        attribution: '&copy; OpenStreetMap contributors'
-    }
-).addTo(mapa);
+        var polygon = L.polygon(polygonCoords, {
+            color: '#0055ff',      // Azul nítido para el borde
+            weight: 2.5,           // Ancho fino para evitar bordes gruesos/pixeleados
+            opacity: 0.9,
+            fillColor: '#3388ff',
+            fillOpacity: 0.25      // Transparencia limpia del área
+        }).addTo(map);
 
-const delimitacion = L.polygon(coordenadas, {
-    color: '#0057b8',
-    weight: 4,
-    fillColor: '#3388ff',
-    fillOpacity: 0.25
-}).addTo(mapa);
+        // Marcador e Info del Módulo Policial
+        var marker = L.marker([-17.9575, -67.1220]).addTo(map);
+        marker.bindPopup("<div class='popup-header'>MÓDULO POLICIAL<br>SAN JOSÉ<br><small>E.P.I. N°3</small></div>").openPopup();
 
-delimitacion.bindPopup(
-    '<b>MÓDULO POLICIAL SAN JOSÉ</b><br>E.P.I. N°3'
-);
-
-mapa.fitBounds(delimitacion.getBounds());
-
-</script>
-
+        // Ajustar la vista automáticamente al límite del polígono
+        map.fitBounds(polygon.getBounds());
+    </script>
 </body>
 </html>
